@@ -1,3 +1,7 @@
 .build/ 
 .vscode/
 Packages/
+/swift-DEVELOPMENT-SNAPSHOT-*.tar.gz
+/swift-DEVELOPMENT-SNAPSHOT-*
+/swift-*-RELEASE.tar.gz
+/swift-*-RELEASE

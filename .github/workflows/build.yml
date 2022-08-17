@@ -63,4 +63,4 @@ jobs:
                 # check that none of the generated .swift files have changed
                 run: | 
                     swift build --target FactoryPluginValidExampleTarget
-                    git status
+                    if [[ -z $(git status -s) ]]; then (exit 0); else (exit 1); fi
