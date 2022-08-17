@@ -1,0 +1,32 @@
+{
+  "pins" : [
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-syntax.git",
+      "state" : {
+        "branch" : "swift-DEVELOPMENT-SNAPSHOT-2022-08-15-a",
+        "revision" : "59c93fc85b59aefcf012df8ffb086a275689d078"
+      }
+    },
+    {
+      "identity" : "swift-system",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-system.git",
+      "state" : {
+        "revision" : "025bcb1165deab2e20d4eaba79967ce73013f496",
+        "version" : "1.2.1"
+      }
+    },
+    {
+      "identity" : "swift-system-extras",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kelvin13/swift-system-extras.git",
+      "state" : {
+        "revision" : "5a67c69d99d4dd7ea33ca5ddb2973f7d80cbdcdd",
+        "version" : "0.1.0"
+      }
+    }
+  ],
+  "version" : 2
+}
