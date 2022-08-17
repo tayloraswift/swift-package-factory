@@ -1,6 +1,8 @@
 // swift-tools-version:5.6
 import PackageDescription
 
+let toolchain:String = "swift-DEVELOPMENT-SNAPSHOT-2022-08-15-a"
+
 let package:Package = .init(
     name: "swift-package-factory",
     products: 
@@ -12,7 +14,7 @@ let package:Package = .init(
     dependencies: 
     [
         .package(url: "https://github.com/kelvin13/swift-system-extras.git", from: "0.1.0"),
-        .package(url: "https://github.com/apple/swift-syntax.git", branch: "swift-DEVELOPMENT-SNAPSHOT-2022-08-15-a"),
+        .package(url: "https://github.com/apple/swift-syntax.git", branch: toolchain),
     ],
     targets:
     [

@@ -30,13 +30,14 @@ struct Main:CommandPlugin
         {
             return try filter.flatMap 
             {
-                if let targets:[SwiftSourceModuleTarget] = targets[$0]
+                (name:String) -> [SwiftSourceModuleTarget] in 
+                if let targets:[SwiftSourceModuleTarget] = targets[name]
                 {
                     return targets 
                 }
                 else 
                 {
-                    throw MissingTargetError.init(name: $0)
+                    throw MissingTargetError.init(name: name)
                 }
             }
         }

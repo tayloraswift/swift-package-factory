@@ -1,10 +1,18 @@
 <div align="center">
   
-***`factory`***<br>`0.1.0`
+***`factory`***<br>`2022-08-15-a`
 
 </div>
 
 **`factory`** is a structured, type-safe source generation tool. It is intended to be a replacement for (and improvement over) the `gyb` tool!
+
+`factory` is powered by [`swift-syntax`](https://github.com/apple/swift-syntax), so it evolves with the toolchain. **You cannot run it with the 5.6.2 release toolchain**, because the 5.6.2 toolchain is too old and does not support the API `factory` needs to transform your sources safely. 
+
+The current toolchain pin is: 
+
+[**`swift-DEVELOPMENT-SNAPSHOT-2022-08-15-a`**](https://github.com/apple/swift-syntax/tags)
+
+Swift files *generated* by `factory` are still backwards compatible, in fact one of the main use cases of `factory` is back-deployment.
 
 ## Overview 
 
@@ -23,6 +31,8 @@
 6.  Templating systems should nudge users towards using **the least amount of templating necessary** for their use-case.
 
 7.  Template sources should be self-explanatory, and understandable by developers who have never heard of `swift-package-factory`.
+
+8.  Template users should be able to *stop* using a templating system, and be able to assume responsibility for maintaining generated `.swift` files at any time.
 
 In a nutshell: 
 
