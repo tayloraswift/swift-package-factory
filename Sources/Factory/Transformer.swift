@@ -44,6 +44,20 @@ extension VariableDeclSyntax
     }
 }
 
+extension TriviaPiece 
+{
+    var isLinebreak:Bool 
+    {
+        switch self 
+        {
+        case .carriageReturnLineFeeds, .carriageReturns, .formfeeds, .newlines: 
+            return true 
+        default: 
+            return false
+        }
+    }
+}
+
 final 
 class Transformer:SyntaxRewriter 
 {
@@ -64,7 +78,26 @@ class Transformer:SyntaxRewriter
         if  let expandable:any MatrixElement = 
             declaration.asProtocol(DeclSyntaxProtocol.self) as? MatrixElement
         {
-            return try expandable.expand(scope: self.scope)
+            // make sure each generated declaration (except for the first one)
+            // begins with a newline 
+            var declarations:[DeclSyntax] = try expandable.expand(scope: self.scope)
+            for index:Int in declarations.indices.dropFirst()
+            {
+                guard let before:Trivia = declarations[index].leadingTrivia 
+                else 
+                {
+                    declarations[index] = declarations[index].withLeadingTrivia(.newlines(1))
+                    continue 
+                }
+                guard case true? = before.first?.isLinebreak
+                else 
+                {
+                    declarations[index] = declarations[index].withLeadingTrivia(.init(
+                        pieces: [.newlines(1)] + before))
+                    continue
+                }
+            }
+            return declarations
         }
         else 
         {
