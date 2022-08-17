@@ -54,8 +54,8 @@ jobs:
             -   name: build-factory
                 run: |
                     swift --version
-                    swift build -c release --product factory 
-                    swift build -c release --product FactoryPlugin 
+                    swift build --product factory 
+                    swift build --product FactoryPlugin 
             -   name: run-factory 
                 run: | 
                     swift package factory 
