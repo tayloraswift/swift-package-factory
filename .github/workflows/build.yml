@@ -58,7 +58,6 @@ jobs:
                     swift build --product FactoryPlugin 
             -   name: run-factory 
                 run: | 
-                    swift package factory 
                     swift package factory FactoryPluginValidExampleTarget
             -   name: test-factory 
                 # check that none of the generated .swift files have changed
