@@ -2,7 +2,7 @@
 
 ***`factory`***<br>`2022-08-15-a`
 
-[![ci build status](https://github.com/kelvin13/swift-json/actions/workflows/build.yml/badge.svg)](https://github.com/kelvin13/swift-json/actions/workflows/build.yml)
+[![ci build status](https://github.com/kelvin13/swift-package-factory/actions/workflows/build.yml/badge.svg)](https://github.com/kelvin13/swift-package-factory/actions/workflows/build.yml)
 
 </div>
 
