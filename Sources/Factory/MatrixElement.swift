@@ -98,7 +98,7 @@ extension MatrixElement
             else if let saved:Trivia = doccomment
             {
                 // this *discards* the attribute’s *own* leading trivia!
-                // if we do not throw it away, the preceeding doccomment 
+                // if we do not throw it away, the preceding doccomment
                 // will be orphaned, which is even worse!
                 kept.append(attribute.withLeadingTrivia(saved))
                 doccomment = nil
@@ -121,7 +121,7 @@ extension MatrixElement
         if let doccomment:Trivia
         {
             // this *discards* the declaration’s *own* leading trivia!
-            // if we do not throw it away, the preceeding doccomment 
+            // if we do not throw it away, the preceding doccomment
             // will be orphaned, which is even worse!
             self = self.withLeadingTrivia(doccomment)
         }
