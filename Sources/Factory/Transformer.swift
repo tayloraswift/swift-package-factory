@@ -78,26 +78,7 @@ class Transformer:SyntaxRewriter
         if  let expandable:any MatrixElement = 
             declaration.asProtocol(DeclSyntaxProtocol.self) as? MatrixElement
         {
-            // make sure each generated declaration (except for the first one)
-            // begins with a newline 
-            var declarations:[DeclSyntax] = try expandable.expand(scope: self.scope)
-            for index:Int in declarations.indices.dropFirst()
-            {
-                guard let before:Trivia = declarations[index].leadingTrivia 
-                else 
-                {
-                    declarations[index] = declarations[index].withLeadingTrivia(.newlines(1))
-                    continue 
-                }
-                guard case true? = before.first?.isLinebreak
-                else 
-                {
-                    declarations[index] = declarations[index].withLeadingTrivia(.init(
-                        pieces: [.newlines(1)] + before))
-                    continue
-                }
-            }
-            return declarations
+            return try expandable.expanded(scope: self.scope)
         }
         else 
         {

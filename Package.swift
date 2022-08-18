@@ -21,9 +21,10 @@ let package:Package = .init(
         .target(name: "Factory", 
             dependencies: 
             [
-                .product(name: "SystemExtras",      package: "swift-system-extras"),
-                .product(name: "SwiftSyntax",       package: "swift-syntax"),
-                .product(name: "SwiftSyntaxParser", package: "swift-syntax"),
+                .product(name: "SystemExtras",          package: "swift-system-extras"),
+                .product(name: "SwiftSyntax",           package: "swift-syntax"),
+                .product(name: "SwiftSyntaxParser",     package: "swift-syntax"),
+                .product(name: "SwiftSyntaxBuilder",    package: "swift-syntax"),
             ]), 
         .executableTarget(name: "factory", 
             dependencies: 

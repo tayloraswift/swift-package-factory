@@ -1,4 +1,5 @@
 import SwiftSyntax
+import SwiftSyntaxBuilder
 
 protocol MatrixElement:DeclSyntaxProtocol 
 {
@@ -23,7 +24,7 @@ extension VariableDeclSyntax:MatrixElement {}
 extension MatrixElement 
 {
     private 
-    func expand(loops:ArraySlice<Loop>, substitutions:[[String: ExprSyntax]]) 
+    func matrixExpanded(_ loops:ArraySlice<Loop>, substitutions:[[String: ExprSyntax]]) 
         throws -> [DeclSyntax]
     {
         if let loop:Loop = loops.first 
@@ -31,7 +32,7 @@ extension MatrixElement
             var instances:[DeclSyntax] = []
             for iteration:[String: ExprSyntax] in loop 
             {
-                instances.append(contentsOf: try self.expand(loops: loops.dropFirst(), 
+                instances.append(contentsOf: try self.matrixExpanded(loops.dropFirst(), 
                     substitutions: substitutions + [iteration]))
             }
             return instances
@@ -126,9 +127,26 @@ extension MatrixElement
         }
         return removed
     }
-    func expand(scope:[[String: [ExprSyntax]]]) throws -> [DeclSyntax]
+    func expanded(scope:[[String: [ExprSyntax]]]) throws -> [DeclSyntax]
     {
         var template:Self = self 
+        let retro:[Void]? = try template.removeAttributes 
+        {
+            guard   let attribute:CustomAttributeSyntax = $0.as(CustomAttributeSyntax.self), 
+                    case "retro"? = attribute.simpleName
+            else 
+            {
+                return nil 
+            }
+            if case _? = attribute.argumentList 
+            {
+                throw Factory.RetroError.unexpectedArguments
+            }
+            else 
+            {
+                return ()
+            }
+        }
         let loops:[Loop]? = try template.removeAttributes 
         {
             guard   let attribute:CustomAttributeSyntax = $0.as(CustomAttributeSyntax.self), 
@@ -137,54 +155,112 @@ extension MatrixElement
             {
                 return nil 
             }
-            guard let arguments:TupleExprElementListSyntax = attribute.argumentList
+            if let arguments:TupleExprElementListSyntax = attribute.argumentList
+            {
+                return try .init(parsing: arguments, scope: scope)
+            }
             else 
             {
                 throw Factory.MatrixError.missingArguments
             }
-            var zipper:[Loop.Thread] = []
-            arguments:
-            for argument:TupleExprElementSyntax in arguments 
-            {
-                guard case .identifier(let binding)? = argument.label?.tokenKind
-                else 
-                {
-                    throw Factory.MatrixError.missingBinding
-                }
-                if      let literal:ArrayExprSyntax = 
-                    argument.expression.as(ArrayExprSyntax.self)
-                {
-                    zipper.append(.init(binding: binding, 
-                        basis: literal.elements.map { $0.expression.withoutTrivia() }))
-                }
-                else if let variable:IdentifierExprSyntax = 
-                    argument.expression.as(IdentifierExprSyntax.self)
-                {
-                    let variable:String = variable.identifier.text
-                    for scope:[String: [ExprSyntax]] in scope.reversed() 
-                    {
-                        if let basis:[ExprSyntax] = scope[variable]
-                        {
-                            zipper.append(.init(binding: binding, basis: basis))
-                            continue arguments  
-                        }
-                    }
-                    throw Factory.MatrixError.undefinedBasis(variable)
-                }
-                else 
-                {
-                    throw Factory.MatrixError.invalidBasis(for: binding)
-                }
-            }
-            return .init(zipper)
         }
+
+        var declarations:[DeclSyntax] 
         if let loops:[Loop]
         {
-            return try template.expand(loops: loops[...], substitutions: [])
+            declarations = try template.matrixExpanded(loops[...], substitutions: [])
         }
         else 
         {
-            return [.init(self)]
+            declarations = [.init(self)]
+        }
+        if case _? = retro
+        {
+            // ensure that *every* declaration starts with a newline
+            declarations.prependMissingNewlines()
+            declarations = try declarations.retroExpanded()
+        }
+        else if declarations.count > 1 
+        {
+            // ensure that *ever* declaration after the first one 
+            // starts with a newline 
+            declarations[1...].prependMissingNewlines()
+        }
+
+        return declarations
+    }
+}
+extension Sequence<DeclSyntax> 
+{
+    func retroExpanded() throws -> [DeclSyntax]
+    {
+        try self.map 
+        {
+            (declaration:DeclSyntax) in 
+
+            guard let declaration:ProtocolDeclSyntax = declaration.as(ProtocolDeclSyntax.self)
+            else 
+            {
+                throw Factory.RetroError.expectedProtocol
+            }
+            guard case _? = declaration.primaryAssociatedTypeClause 
+            else 
+            {
+                throw Factory.RetroError.expectedPrimaryAssociatedTypeClause
+            }
+
+            let modern:IfConfigClauseSyntax = .init(
+                poundKeyword: .poundIf.withLeadingTrivia(.newlines(1)), 
+                condition: .init(FunctionCallExprSyntax.init(
+                    calledExpression: .init(IdentifierExprSyntax.init(
+                        identifier: .identifier("swift"), 
+                        declNameArguments: nil)), 
+                    leftParen: .leftParen, 
+                    argumentList: .init(
+                    [
+                        .init(label: nil, colon: nil, 
+                            expression: .init(PrefixOperatorExprSyntax.init(
+                                operatorToken: .prefixOperator(">="), 
+                                postfixExpression: .init(FloatLiteralExprSyntax.init(
+                                    floatingDigits: .floatingLiteral("5.7"))))), 
+                            trailingComma: nil)
+                    ]), 
+                    rightParen: .rightParen, 
+                    trailingClosure: nil, 
+                    additionalTrailingClosures: nil)), 
+                elements: .init(declaration))
+            let retro:IfConfigClauseSyntax = .init(
+                poundKeyword: .poundElse.withLeadingTrivia(.newlines(1)), 
+                condition: nil, 
+                elements: .init(declaration.withPrimaryAssociatedTypeClause(nil)))
+            let block:IfConfigDeclSyntax = .init(
+                clauses: .init([modern, retro]), 
+                poundEndif: .poundEndif.withLeadingTrivia(.newlines(1)))
+
+            return .init(block)
+        }
+    }
+}
+extension MutableCollection<DeclSyntax> 
+{
+    mutating 
+    func prependMissingNewlines() 
+    {
+        for index:Index in self.indices
+        {
+            guard let before:Trivia = self[index].leadingTrivia 
+            else 
+            {
+                self[index] = self[index].withLeadingTrivia(.newlines(1))
+                continue 
+            }
+            guard case true? = before.first?.isLinebreak
+            else 
+            {
+                self[index] = self[index].withLeadingTrivia(.init(
+                    pieces: [.newlines(1)] + before))
+                continue
+            }
         }
     }
 }

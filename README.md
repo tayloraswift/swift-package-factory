@@ -110,3 +110,23 @@ extension Int
 ## Getting started 
 
 Check out the [`Examples`](Examples/) directory to learn how to use SPF!
+
+## Features 
+
+`factory` extends the Swift language with three attributes:
+
+1.  **`@basis`**
+
+    Defines a sequence of tokens to iterate over when generating declarations from a template. It can be applied to a `let` binding, and it must be initialized with an array literal. 
+
+    The declaration it is attached to will be removed from the generated `.swift` code, along with any associated comments and doccomments.
+
+2.  **`@matrix`**
+
+    Replicates the declaration it is attached to, along with any associated comments and doccomments, iterating along zipped `@basis` bindings or and/or inline array literals. It can be applied to an `associatedtype`, `actor`, `class`, `case`, `enum`, `extension`, `func`, `import`, `init`, `operator`, precedence group, `protocol`, `struct`, `subscript`, `typealias`, `let`, or `var` declaration.
+
+3.  **`@retro`** 
+
+    Downgrades a protocol with primary associated types to a protocol without any, and gates the two variants by `#if swift(>=5.7)`. It can only be applied to a `protocol` with at least one primary `associatedtype`.
+
+    `@retro` copies any comments and doccomments attached to the original `protocol`, and includes them in the generated `#if` blocks.

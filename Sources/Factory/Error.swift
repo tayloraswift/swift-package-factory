@@ -19,6 +19,27 @@ extension Factory
         }
     }
     public 
+    enum RetroError:Error 
+    {
+        case unexpectedArguments 
+        case expectedProtocol
+        case expectedPrimaryAssociatedTypeClause 
+
+        public 
+        var description:String 
+        {
+            switch self 
+            {
+            case .unexpectedArguments: 
+                return "@retro takes no arguments"
+            case .expectedProtocol: 
+                return "@retro can only be applied to a protocol"
+            case .expectedPrimaryAssociatedTypeClause: 
+                return "@retro can only be applied to a protocol with primary associated types"
+            }
+        }
+    }
+    public 
     enum MatrixError:Error 
     {
         case missingArguments

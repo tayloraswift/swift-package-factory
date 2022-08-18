@@ -1,0 +1,10 @@
+/// This is an evolving protocol with a primary 
+/// associatedtype.
+@matrix(__Protocol__: [EvolvingProtocolA, EvolvingProtocolB])
+@retro protocol __Protocol__<Element, Index>
+{
+    associatedtype Element 
+    associatedtype Index:Strideable
+
+    init()
+}
