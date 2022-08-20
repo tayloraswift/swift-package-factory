@@ -57,6 +57,21 @@ struct Main:CommandPlugin
                 switch file.path.extension 
                 {
                 case "spf", "swiftpf", "factory":
+                    #if os(macOS)
+                    tool.path.string.withCString 
+                    {
+                        (tool:UnsafePointer<CChar>) in 
+                        file.path.string.withCString 
+                        {
+                            (file:UnsafePointer<CChar>) in 
+                            var pid:pid_t = 0
+                            posix_spawn(&pid, tool, nil, nil, [.init(mutating: tool), .init(mutating: file)], nil)
+                            var status:Int32 = 0
+                            waitpid(pid, &status, 0)
+                        }
+                    }
+                    
+                    #else
                     switch system("\(tool.path.string) \(file.path.string)")
                     {
                     case 0: 
@@ -64,6 +79,7 @@ struct Main:CommandPlugin
                     case let code: 
                         print("failed to transform file '\(file.path.string)' (exit code: \(code))")
                     }
+                    #endif
                 default: 
                     continue 
                 }
