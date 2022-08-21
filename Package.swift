@@ -7,9 +7,9 @@ let package:Package = .init(
     name: "swift-package-factory",
     products: 
     [
-        .executable(name: "factory",    targets: ["factory"]),
-        .library(name: "Factory",       targets: ["Factory"]),
-        .plugin(name: "FactoryPlugin",  targets: ["FactoryPlugin"]),
+        .executable(name: "swift-package-factory",  targets: ["swift-package-factory"]),
+        .library(name: "Factory",                   targets: ["Factory"]),
+        .plugin(name: "FactoryPlugin",              targets: ["FactoryPlugin"]),
     ],
     dependencies: 
     [
@@ -26,7 +26,7 @@ let package:Package = .init(
                 .product(name: "SwiftSyntaxParser",     package: "swift-syntax"),
                 .product(name: "SwiftSyntaxBuilder",    package: "swift-syntax"),
             ]), 
-        .executableTarget(name: "factory", 
+        .executableTarget(name: "swift-package-factory", 
             dependencies: 
             [
                 .target(name: "Factory"),
@@ -41,7 +41,7 @@ let package:Package = .init(
                 ]),
             dependencies: 
             [
-                .target(name: "factory"),
+                .target(name: "swift-package-factory"),
             ]), 
         
         .target(name: "FactoryPluginValidExampleTarget", path: "Examples/ValidExamples"), 

@@ -44,7 +44,7 @@ struct Main:CommandPlugin
     }
     func performCommand(context:PluginContext, arguments:[String]) throws 
     {
-        let tool:PluginContext.Tool = try context.tool(named: "factory")
+        let tool:PluginContext.Tool = try context.tool(named: "swift-package-factory")
         for target:SwiftSourceModuleTarget in try Self.targets(context: context, filter: arguments) 
         {
             for file:File in target.sourceFiles
