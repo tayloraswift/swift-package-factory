@@ -7,25 +7,44 @@ on:
         branches: [ master ]
 
 jobs:
-    # benchmark-macos:
-    #     runs-on: ${{ matrix.os }}
-    #     strategy:
-    #         matrix:
-    #             os: [macos-12]
-    #     steps:
-    #         -   uses: actions/checkout@v2
-    #         -   name: run-benchmarks 
-    #             run: |
-    #                 cd Benchmarks
-    #                 mkdir .data && tar -xf data.tar.xz -C .data
-    #                 swift --version
-    #                 swift run -c release benchmark .data/ftx.json
-    #                 swift run -c release benchmark-aws-ipam .data/aws-ipamd.jsonl
+    build-macos:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [macos-12]
+                swift: [DEVELOPMENT-SNAPSHOT-2022-08-15-a]
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: cache swift toolchains
+                uses: actions/cache@v2
+                with:
+                    path: swift-${{ matrix.swift }}.pkg
+                    key: ${{ matrix.os }}:swift:${{ matrix.swift }}
+            
+            -   name: cache status
+                id:   cache_status
+                uses: andstor/file-existence-action@v1
+                with:
+                    files: swift-${{ matrix.swift }}.pkg
+            
+            -   name: download swift toolchain 
+                if: steps.cache_status.outputs.files_exists == 'false'
+                run: curl https://download.swift.org/development/xcode/swift-${{ matrix.swift }}/swift-${{ matrix.swift }}-osx.pkg --output swift-${{ matrix.swift }}.pkg
+            
+            -   name: set up swift
+                run: |
+                    installer -pkg swift-${{ matrix.swift }}.pkg -target /
+            
+            -   name: build-factory
+                run: |
+                    /Library/Developer/Toolchains/swift-${{ matrix.swift }}.xctoolchain/usr/bin/swift --version
+
     build-linux:
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
-                os: [ubuntu-20.04]
+                os: [ubuntu-22.04, ubuntu-20.04]
                 swift: [DEVELOPMENT-SNAPSHOT-2022-08-15-a]
         steps:
             -   uses: actions/checkout@v2
