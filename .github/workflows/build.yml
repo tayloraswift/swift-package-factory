@@ -34,7 +34,7 @@ jobs:
             
             -   name: set up swift
                 run: |
-                    installer -pkg swift-${{ matrix.swift }}.pkg -target /
+                    sudo installer -pkg swift-${{ matrix.swift }}.pkg -target /
             
             -   name: build-factory
                 run: |
