@@ -46,16 +46,16 @@ jobs:
             
             -   name: build-factory
                 run: |
-                    $SWIFT_TOOLCHAIN_DIRECTORY/swift --version
-                    $SWIFT_TOOLCHAIN_DIRECTORY/swift build --product swift-package-factory 
-                    $SWIFT_TOOLCHAIN_DIRECTORY/swift build --product FactoryPlugin 
+                    $SWIFT_TOOLCHAIN_DIRECTORY/usr/bin/swift --version
+                    $SWIFT_TOOLCHAIN_DIRECTORY/usr/bin/swift build --product swift-package-factory 
+                    $SWIFT_TOOLCHAIN_DIRECTORY/usr/bin/swift build --product FactoryPlugin 
             -   name: run-factory 
                 run: | 
-                    $SWIFT_TOOLCHAIN_DIRECTORY/swift package factory FactoryPluginValidExampleTarget
+                    $SWIFT_TOOLCHAIN_DIRECTORY/usr/bin/swift package factory FactoryPluginValidExampleTarget
             -   name: test-factory 
                 # check that none of the generated .swift files have changed
                 run: | 
-                    $SWIFT_TOOLCHAIN_DIRECTORY/swift build --target FactoryPluginValidExampleTarget
+                    $SWIFT_TOOLCHAIN_DIRECTORY/usr/bin/swift build --target FactoryPluginValidExampleTarget
                     if [[ -z $(git status -s) ]]; then (exit 0); else (exit 1); fi
     
     linux:
