@@ -5,6 +5,10 @@ let toolchain:String = "swift-DEVELOPMENT-SNAPSHOT-2022-08-15-a"
 
 let package:Package = .init(
     name: "swift-package-factory",
+    platforms: 
+    [
+        .macOS(.v11)
+    ],
     products: 
     [
         .executable(name: "swift-package-factory",  targets: ["swift-package-factory"]),

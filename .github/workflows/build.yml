@@ -51,6 +51,7 @@ jobs:
                     $SWIFT_TOOLCHAIN_DIRECTORY/usr/bin/swift build --product FactoryPlugin 
             -   name: run-factory 
                 run: | 
+                    rm Examples/ValidExamples/*.swift
                     $SWIFT_TOOLCHAIN_DIRECTORY/usr/bin/swift package factory FactoryPluginValidExampleTarget
             -   name: test-factory 
                 # check that none of the generated .swift files have changed
@@ -110,6 +111,7 @@ jobs:
                     swift build --product FactoryPlugin 
             -   name: run-factory 
                 run: | 
+                    rm Examples/ValidExamples/*.swift
                     swift package factory FactoryPluginValidExampleTarget
             -   name: test-factory 
                 # check that none of the generated .swift files have changed
