@@ -44,8 +44,9 @@ struct Main:CommandPlugin
     }
     func performCommand(context:PluginContext, arguments:[String]) throws 
     {
-        let tool:PluginContext.Tool = try context.tool(named: "factory")
-        for target:SwiftSourceModuleTarget in try Self.targets(context: context, filter: arguments) 
+        let tool:PluginContext.Tool = try context.tool(named: "swift-package-factory")
+        for target:SwiftSourceModuleTarget in 
+            try Self.targets(context: context, filter: arguments) 
         {
             for file:File in target.sourceFiles
             {
@@ -57,13 +58,52 @@ struct Main:CommandPlugin
                 switch file.path.extension 
                 {
                 case "spf", "swiftpf", "factory":
-                    switch system("\(tool.path.string) \(file.path.string)")
+                    do 
                     {
-                    case 0: 
-                        break 
-                    case let code: 
-                        print("failed to transform file '\(file.path.string)' (exit code: \(code))")
+                        try tool.path.string.withCString 
+                        {
+                            (ctool:UnsafePointer<CChar>) in 
+                            try file.path.string.withCString 
+                            {
+                                (cfile:UnsafePointer<CChar>) in 
+                                // must be null-terminated!
+                                let argv:[UnsafeMutablePointer<CChar>?] = 
+                                [
+                                    .init(mutating: ctool), 
+                                    .init(mutating: cfile), 
+                                    nil
+                                ]
+                                var pid:pid_t = 0
+                                switch posix_spawn(&pid, ctool, nil, nil, argv, nil)
+                                {
+                                case 0: 
+                                    break 
+                                case let code: 
+                                    throw ToolError.init(file: file.path.string, 
+                                        subtask: .posix_spawn, 
+                                        status: code)
+                                }
+                                var status:Int32 = 0
+                                switch waitpid(pid, &status, 0)
+                                {
+                                case pid: 
+                                    break 
+                                case let code:
+                                    throw ToolError.init(file: file.path.string, 
+                                        subtask: .waitpid, 
+                                        status: code)
+                                }
+                                guard status == 0 
+                                else 
+                                {
+                                    throw ToolError.init(file: file.path.string, 
+                                        subtask: .factory, 
+                                        status: status)
+                                }
+                            }
+                        }
                     }
+
                 default: 
                     continue 
                 }
