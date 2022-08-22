@@ -16,6 +16,12 @@ The current toolchain pin is:
 
 Swift files *generated* by `factory` are still backwards compatible, in fact one of the main use cases of `factory` is back-deployment.
 
+## Platforms 
+
+SPF officially supports Linux and macOS. 
+
+Please note that on macOS, SPM sets the [wrong `@rpath`](https://forums.swift.org/t/5-8-compiler-sets-rpath-to-usr-lib-swift-5-5-macosx-why/59797) by default, so you will need to manually add a symlink to `lib_InternalSwiftSyntaxParser.dylib` inside your build artifacts directory.
+
 ## Overview 
 
 `factory` was designed with the following goals in mind:
@@ -123,10 +129,12 @@ Check out the [`Examples`](Examples/) directory to learn how to use SPF!
 
 2.  **`@matrix`**
 
-    Replicates the declaration it is attached to, along with any associated comments and doccomments, iterating along zipped `@basis` bindings or and/or inline array literals. It can be applied to an `associatedtype`, `actor`, `class`, `case`, `enum`, `extension`, `func`, `import`, `init`, `operator`, precedence group, `protocol`, `struct`, `subscript`, `typealias`, `let`, or `var` declaration.
+    Replicates the declaration it is attached to, along with any associated comments and doccomments. It takes `@basis` bindings or and/or inline array literals as arguments, with the name of the argument becoming the name of the loop variable. If more than one basis is given, `@matrix` zips them, and will discard trailing basis elements if their lengths differ.
+    
+    `@matrix` can be applied to an `associatedtype`, `actor`, `class`, `case`, `enum`, `extension`, `func`, `import`, `init`, `operator`, precedence group, `protocol`, `struct`, `subscript`, `typealias`, `let`, or `var` declaration.
 
 3.  **`@retro`** 
 
-    Downgrades a protocol with primary associated types to a protocol without any, and gates the two variants by `#if swift(>=5.7)`. It can only be applied to a `protocol` with at least one primary `associatedtype`.
+    Downgrades a protocol with primary associated types to a protocol without any, and gates the two variants by `#if swift(>=5.7)`. It can be applied to a `protocol` with at least one primary `associatedtype`.
 
     `@retro` copies any comments and doccomments attached to the original `protocol`, and includes them in the generated `#if` blocks.
