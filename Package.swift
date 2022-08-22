@@ -41,7 +41,7 @@ let package:Package = .init(
                     description: "generate swift sources from factory sources"), 
                 permissions: 
                 [
-                    //.writeToPackageDirectory(reason: "factory emits source files")
+                    .writeToPackageDirectory(reason: "factory emits source files")
                 ]),
             dependencies: 
             [
