@@ -51,7 +51,10 @@ jobs:
                     $SWIFT_TOOLCHAIN_DIRECTORY/usr/bin/swift build --product FactoryPlugin 
             -   name: run-factory 
                 # need to (re)create empty swift file to satisfy the SPM
+                # also need to manually symlink lib_InternalSwiftSyntaxParser.dylib since SPM 
+                # sets the wrong @rpath. 
                 run: | 
+                    ln -s $SWIFT_TOOLCHAIN_DIRECTORY/usr/lib/swift/macosx/lib_InternalSwiftSyntaxParser.dylib .build/debug/lib_InternalSwiftSyntaxParser.dylib
                     rm Examples/ValidExamples/*.swift
                     touch Examples/ValidExamples/Empty.swift
                     $SWIFT_TOOLCHAIN_DIRECTORY/usr/bin/swift package factory FactoryPluginValidExampleTarget
