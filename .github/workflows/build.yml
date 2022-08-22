@@ -17,7 +17,7 @@ jobs:
                 os: 
                     -   macos-12
                 swift: 
-                    -   DEVELOPMENT-SNAPSHOT-2022-08-15-a
+                    -   DEVELOPMENT-SNAPSHOT-2022-08-18-a
         steps:
             -   uses: actions/checkout@v2
 
@@ -77,7 +77,7 @@ jobs:
                         prefix: ubuntu2004
                         suffix: ubuntu20.04
                 swift: 
-                    -   toolchain:  DEVELOPMENT-SNAPSHOT-2022-08-15-a
+                    -   toolchain:  DEVELOPMENT-SNAPSHOT-2022-08-18-a
                         branch:     development
         steps:
             -   uses: actions/checkout@v2
