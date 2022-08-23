@@ -1,4 +1,26 @@
 import SwiftSyntax 
+import SwiftSyntaxParser
+
+extension ExprSyntax 
+{
+    func `as`(_:TypeSyntax.Type) -> TypeSyntax? 
+    {
+        if  let reparsed:SourceFileSyntax = 
+            try? SyntaxParser.parse(source: "_ as \(self.description)"), 
+                reparsed.statements.count == 1, 
+            let reparsed:Syntax = reparsed.statements.first?.item, 
+            let reparsed:SequenceExprSyntax = reparsed.as(SequenceExprSyntax.self),
+                reparsed.elements.count == 2, 
+            let reparsed:AsExprSyntax = reparsed.elements.last?.as(AsExprSyntax.self)
+        {
+            return reparsed.typeName
+        }
+        else 
+        {
+            return nil 
+        }
+    }
+}
 
 final 
 class Instantiator:SyntaxRewriter 
@@ -26,6 +48,23 @@ class Instantiator:SyntaxRewriter
         super.init()
     }
 
+    final override 
+    func visit(_ expression:SimpleTypeIdentifierSyntax) -> TypeSyntax
+    {
+        if  case .identifier(let identifier) = expression.name.tokenKind, 
+            case nil = expression.genericArgumentClause,
+            let substitution:TypeSyntax = self.lookup(identifier)?.as(TypeSyntax.self)
+        {
+            // preserve the original trivia
+            return substitution 
+                .withLeadingTrivia(expression.name.leadingTrivia)
+                .withTrailingTrivia(expression.name.trailingTrivia)
+        }
+        else 
+        {
+            return super.visit(expression)
+        }
+    }
     final override 
     func visit(_ expression:IdentifierExprSyntax) -> ExprSyntax
     {

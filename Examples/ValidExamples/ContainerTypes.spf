@@ -1,0 +1,19 @@
+@basis 
+let primitives:[Never] = 
+[
+    Int, 
+    Int?, 
+    [Int], 
+    [Int: Int],
+    (Int, Int),
+    ((Int, Int) throws -> Int),
+]
+
+enum Variant 
+{
+    @matrix(__Primitive__: primitives)
+    func `as`(_:__Primitive__.Type = __Primitive__.self) -> __Primitive__?
+    {
+        nil 
+    }
+}
