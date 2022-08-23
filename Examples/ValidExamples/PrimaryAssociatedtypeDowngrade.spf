@@ -8,3 +8,9 @@
 
     init()
 }
+/// Another example.
+@retro protocol AnotherProtocol<Wrapped>
+{
+    associatedtype Wrapped
+    associatedtype Projection
+}
