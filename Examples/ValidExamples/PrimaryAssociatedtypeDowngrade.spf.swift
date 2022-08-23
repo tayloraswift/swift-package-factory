@@ -41,3 +41,18 @@ protocol EvolvingProtocolB
     init()
 }
 #endif 
+#if swift(>=5.7)
+/// Another example.
+protocol AnotherProtocol<Wrapped>
+{
+    associatedtype Wrapped
+    associatedtype Projection
+}
+#else 
+/// Another example.
+protocol AnotherProtocol
+{
+    associatedtype Wrapped
+    associatedtype Projection
+}
+#endif 

@@ -172,7 +172,7 @@ extension MatrixElement
         }
         else 
         {
-            declarations = [.init(self)]
+            declarations = [.init(template)]
         }
         if case _? = retro
         {
