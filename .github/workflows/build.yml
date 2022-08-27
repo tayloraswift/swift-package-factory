@@ -57,11 +57,11 @@ jobs:
                     ln -s $SWIFT_TOOLCHAIN_DIRECTORY/usr/lib/swift/macosx/lib_InternalSwiftSyntaxParser.dylib .build/debug/lib_InternalSwiftSyntaxParser.dylib
                     rm Examples/ValidExamples/*.swift
                     touch Examples/ValidExamples/Empty.swift
-                    $SWIFT_TOOLCHAIN_DIRECTORY/usr/bin/swift package --allow-writing-to-package-directory factory FactoryPluginValidExampleTarget
+                    $SWIFT_TOOLCHAIN_DIRECTORY/usr/bin/swift package --allow-writing-to-package-directory factory ValidExamples
             -   name: test-factory 
                 # check that none of the generated .swift files have changed
                 run: | 
-                    $SWIFT_TOOLCHAIN_DIRECTORY/usr/bin/swift build --target FactoryPluginValidExampleTarget
+                    $SWIFT_TOOLCHAIN_DIRECTORY/usr/bin/swift build --target ValidExamples
                     if [[ -z $(git status -s) ]]; then (exit 0); else (exit 1); fi
     
     linux:
@@ -119,9 +119,9 @@ jobs:
                 run: | 
                     rm Examples/ValidExamples/*.swift
                     touch Examples/ValidExamples/Empty.swift
-                    swift package --allow-writing-to-package-directory factory FactoryPluginValidExampleTarget
+                    swift package --allow-writing-to-package-directory factory ValidExamples
             -   name: test-factory 
                 # check that none of the generated .swift files have changed
                 run: | 
-                    swift build --target FactoryPluginValidExampleTarget
+                    swift build --target ValidExamples
                     if [[ -z $(git status -s) ]]; then (exit 0); else (exit 1); fi

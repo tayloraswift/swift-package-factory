@@ -48,7 +48,7 @@ let package:Package = .init(
                 .target(name: "swift-package-factory"),
             ]), 
         
-        .target(name: "FactoryPluginValidExampleTarget", path: "Examples/ValidExamples"), 
-        .target(name: "FactoryPluginInvalidExampleTarget", path: "Examples/InvalidExamples"), 
+        .target(name: "ValidExamples", path: "Examples/ValidExamples"), 
+        .target(name: "InvalidExamples", path: "Examples/InvalidExamples"), 
     ]
 )
