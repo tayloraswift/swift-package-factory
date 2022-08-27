@@ -1,6 +1,5 @@
 .build/ 
 .vscode/
-.devcontainer/
 Packages/
 /swift-DEVELOPMENT-SNAPSHOT-*.tar.gz
 /swift-DEVELOPMENT-SNAPSHOT-*

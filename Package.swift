@@ -1,7 +1,7 @@
 // swift-tools-version:5.6
 import PackageDescription
 
-let toolchain:String = "swift-DEVELOPMENT-SNAPSHOT-2022-08-18-a"
+let toolchain:String = "swift-DEVELOPMENT-SNAPSHOT-2022-08-24-a"
 
 let package:Package = .init(
     name: "swift-package-factory",
@@ -48,7 +48,7 @@ let package:Package = .init(
                 .target(name: "swift-package-factory"),
             ]), 
         
-        .target(name: "FactoryPluginValidExampleTarget", path: "Examples/ValidExamples"), 
-        .target(name: "FactoryPluginInvalidExampleTarget", path: "Examples/InvalidExamples"), 
+        .target(name: "ValidExamples", path: "Examples/ValidExamples"), 
+        .target(name: "InvalidExamples", path: "Examples/InvalidExamples"), 
     ]
 )
