@@ -3,17 +3,17 @@ import SwiftSyntaxParser
 
 extension ExprSyntax 
 {
-    func `as`(_:TypeSyntax.Type) -> TypeSyntax? 
+    func reparsedAsType() -> TypeSyntax? 
     {
         if  let reparsed:SourceFileSyntax = 
             try? SyntaxParser.parse(source: "_ as \(self.description)"), 
                 reparsed.statements.count == 1, 
             let reparsed:Syntax = reparsed.statements.first?.item, 
             let reparsed:SequenceExprSyntax = reparsed.as(SequenceExprSyntax.self),
-                reparsed.elements.count == 2, 
-            let reparsed:AsExprSyntax = reparsed.elements.last?.as(AsExprSyntax.self)
+                reparsed.elements.count == 3, 
+            let reparsed:TypeExprSyntax = reparsed.elements.last?.as(TypeExprSyntax.self)
         {
-            return reparsed.typeName
+            return reparsed.type
         }
         else 
         {
@@ -53,7 +53,7 @@ class Instantiator:SyntaxRewriter
     {
         if  case .identifier(let identifier) = expression.name.tokenKind, 
             case nil = expression.genericArgumentClause,
-            let substitution:TypeSyntax = self.lookup(identifier)?.as(TypeSyntax.self)
+            let substitution:TypeSyntax = self.lookup(identifier)?.reparsedAsType()
         {
             // preserve the original trivia
             return substitution 
