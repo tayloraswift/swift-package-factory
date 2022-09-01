@@ -210,12 +210,12 @@ extension Sequence<DeclSyntax>
             }
 
             let modern:IfConfigClauseSyntax = .init(
-                poundKeyword: .poundIf.withLeadingTrivia(.newlines(1)), 
+                poundKeyword: .poundIfKeyword(leadingTrivia: .newlines(1)), 
                 condition: .init(FunctionCallExprSyntax.init(
                     calledExpression: .init(IdentifierExprSyntax.init(
                         identifier: .identifier("swift"), 
                         declNameArguments: nil)), 
-                    leftParen: .leftParen, 
+                    leftParen: .leftParenToken(), 
                     argumentList: .init(
                     [
                         .init(label: nil, colon: nil, 
@@ -225,17 +225,17 @@ extension Sequence<DeclSyntax>
                                     floatingDigits: .floatingLiteral("5.7"))))), 
                             trailingComma: nil)
                     ]), 
-                    rightParen: .rightParen, 
+                    rightParen: .rightParenToken(), 
                     trailingClosure: nil, 
                     additionalTrailingClosures: nil)), 
                 elements: .init(declaration))
             let retro:IfConfigClauseSyntax = .init(
-                poundKeyword: .poundElse.withLeadingTrivia(.newlines(1)), 
+                poundKeyword: .poundElseKeyword(leadingTrivia: .newlines(1)), 
                 condition: nil, 
                 elements: .init(declaration.withPrimaryAssociatedTypeClause(nil)))
             let block:IfConfigDeclSyntax = .init(
                 clauses: .init([modern, retro]), 
-                poundEndif: .poundEndif.withLeadingTrivia(.newlines(1)))
+                poundEndif: .poundEndifKeyword(leadingTrivia: .newlines(1)))
 
             return .init(block)
         }
