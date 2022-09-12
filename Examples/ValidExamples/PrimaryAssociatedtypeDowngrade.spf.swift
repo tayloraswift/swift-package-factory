@@ -9,7 +9,7 @@ protocol EvolvingProtocolA<Element, Index>
 
     init()
 }
-#else 
+#else
 /// This is an evolving protocol with a primary 
 /// associatedtype.
 protocol EvolvingProtocolA
@@ -19,7 +19,7 @@ protocol EvolvingProtocolA
 
     init()
 }
-#endif 
+#endif
 #if swift(>=5.7)
 /// This is an evolving protocol with a primary 
 /// associatedtype.
@@ -30,7 +30,7 @@ protocol EvolvingProtocolB<Element, Index>
 
     init()
 }
-#else 
+#else
 /// This is an evolving protocol with a primary 
 /// associatedtype.
 protocol EvolvingProtocolB
@@ -40,7 +40,7 @@ protocol EvolvingProtocolB
 
     init()
 }
-#endif 
+#endif
 #if swift(>=5.7)
 /// Another example.
 protocol AnotherProtocol<Wrapped>
@@ -48,11 +48,11 @@ protocol AnotherProtocol<Wrapped>
     associatedtype Wrapped
     associatedtype Projection
 }
-#else 
+#else
 /// Another example.
 protocol AnotherProtocol
 {
     associatedtype Wrapped
     associatedtype Projection
 }
-#endif 
+#endif

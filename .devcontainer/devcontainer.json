@@ -7,12 +7,5 @@
     "extensions": 
     [
       "sswg.swift-lang"
-    ],
-    "settings": 
-    {
-        // needed due to https://github.com/swift-server/vscode-swift/issues/365
-        "swift.path": "/home/ec2-user/.swiftenv/versions/DEVELOPMENT-SNAPSHOT-2022-08-30-a/usr/bin",
-        // needed to suppress vscode-swift warning
-        "lldb.library": "/home/ec2-user/.swiftenv/versions/DEVELOPMENT-SNAPSHOT-2022-08-30-a/usr/lib/liblldb.so"
-    }
+    ]
 }
