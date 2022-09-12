@@ -210,7 +210,9 @@ extension Sequence<DeclSyntax>
             }
 
             let modern:IfConfigClauseSyntax = .init(
-                poundKeyword: .poundIfKeyword(leadingTrivia: .newlines(1)), 
+                poundKeyword: .poundIfKeyword(
+                    leadingTrivia: .newlines(1), 
+                    trailingTrivia: .spaces(1)), 
                 condition: .init(FunctionCallExprSyntax.init(
                     calledExpression: .init(IdentifierExprSyntax.init(
                         identifier: .identifier("swift"), 
