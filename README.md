@@ -1,6 +1,6 @@
 <div align="center">
 
-***`factory`***<br>`2022-09-12-a`
+***`factory`***<br>`2022-09-24-a`
 
 [![ci build status](https://github.com/kelvin13/swift-package-factory/actions/workflows/build.yml/badge.svg)](https://github.com/kelvin13/swift-package-factory/actions/workflows/build.yml)
 
@@ -12,7 +12,7 @@
 
 The current toolchain pin is: 
 
-[**`swift-DEVELOPMENT-SNAPSHOT-2022-09-12-a`**](https://github.com/apple/swift-syntax/tags)
+[**`swift-DEVELOPMENT-SNAPSHOT-2022-09-24-a`**](https://github.com/apple/swift-syntax/tags)
 
 Swift files *generated* by `factory` are still backwards compatible, in fact one of the main use cases of `factory` is back-deployment.
 
