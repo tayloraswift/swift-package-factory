@@ -23,7 +23,7 @@ extension VariableDeclSyntax
         var scratch:Self = self 
         let basis:[Void]? = scratch.removeAttributes
         {
-            if  let attribute:CustomAttributeSyntax = $0.as(CustomAttributeSyntax.self), 
+            if  case .customAttribute(let attribute) = $0,
                 case "basis"? = attribute.simpleName
             {
                 return ()
@@ -122,7 +122,7 @@ class Transformer:SyntaxRewriter
     }
 
     final override 
-    func visit(_ list:CodeBlockItemListSyntax) -> Syntax
+    func visit(_ list:CodeBlockItemListSyntax) -> CodeBlockItemListSyntax
     {
         var list:CodeBlockItemListSyntax = list 
         let bindings:[PatternBindingListSyntax] = list.remove 
@@ -146,21 +146,20 @@ class Transformer:SyntaxRewriter
                     }
                     for element:DeclSyntax in expanded 
                     {
-                        elements.append(.init(item: Syntax.init(element), 
-                            semicolon: nil, errorTokens: nil))
+                        elements.append(.init(item: .init(element)))
                     }
                 }
-                return .init(super.visit(CodeBlockItemListSyntax.init(elements)))
+                return super.visit(CodeBlockItemListSyntax.init(elements))
             }
         }
         catch let error 
         {
             self.errors.append(error)
-            return .init(list)
+            return list
         }
     }
     final override 
-    func visit(_ list:MemberDeclListSyntax) -> Syntax
+    func visit(_ list:MemberDeclListSyntax) -> MemberDeclListSyntax
     {
         var list:MemberDeclListSyntax = list 
         let bindings:[PatternBindingListSyntax]? = list.remove 
@@ -186,13 +185,13 @@ class Transformer:SyntaxRewriter
                         elements.append(.init(decl: element, semicolon: nil))
                     }
                 }
-                return .init(super.visit(MemberDeclListSyntax.init(elements)))
+                return super.visit(MemberDeclListSyntax.init(elements))
             }
         }
         catch let error 
         {
             self.errors.append(error)
-            return .init(list)
+            return list
         }
     }
 }
