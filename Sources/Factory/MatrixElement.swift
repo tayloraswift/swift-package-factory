@@ -69,7 +69,8 @@ extension MatrixElement
         }
     }
     mutating 
-    func removeAttributes<Recognized>(where recognize:(Syntax) throws -> Recognized?) 
+    func removeAttributes<Recognized>(
+        where recognize:(AttributeListSyntax.Element) throws -> Recognized?) 
         rethrows -> [Recognized]?
     {
         guard let attributes:AttributeListSyntax = self.attributes 
@@ -80,9 +81,9 @@ extension MatrixElement
         var removed:[Recognized] = []
         // if we delete a node, its leading trivia should coalesce with the 
         // leading trivia of the next node 
-        var kept:[Syntax] = []
+        var kept:[AttributeListSyntax.Element] = []
         var doccomment:Trivia? = nil
-        for attribute:Syntax in attributes 
+        for attribute:AttributeListSyntax.Element in attributes 
         {
             if let recognized:Recognized = try recognize(attribute) 
             {
@@ -132,7 +133,7 @@ extension MatrixElement
         var template:Self = self 
         let retro:[Void]? = try template.removeAttributes 
         {
-            guard   let attribute:CustomAttributeSyntax = $0.as(CustomAttributeSyntax.self), 
+            guard   case .customAttribute(let attribute) = $0, 
                     case "retro"? = attribute.simpleName
             else 
             {
@@ -149,7 +150,7 @@ extension MatrixElement
         }
         let loops:[Loop]? = try template.removeAttributes 
         {
-            guard   let attribute:CustomAttributeSyntax = $0.as(CustomAttributeSyntax.self), 
+            guard   case .customAttribute(let attribute) = $0,
                     case "matrix"? = attribute.simpleName
             else 
             {
@@ -230,11 +231,17 @@ extension Sequence<DeclSyntax>
                     rightParen: .rightParenToken(), 
                     trailingClosure: nil, 
                     additionalTrailingClosures: nil)), 
-                elements: .init(declaration))
+                elements: .decls(
+                [
+                    .init(decl: declaration)
+                ]))
             let retro:IfConfigClauseSyntax = .init(
                 poundKeyword: .poundElseKeyword(leadingTrivia: .newlines(1)), 
                 condition: nil, 
-                elements: .init(declaration.withPrimaryAssociatedTypeClause(nil)))
+                elements: .decls(
+                [
+                    .init(decl: declaration.withPrimaryAssociatedTypeClause(nil))
+                ]))
             let block:IfConfigDeclSyntax = .init(
                 clauses: .init([modern, retro]), 
                 poundEndif: .poundEndifKeyword(leadingTrivia: .newlines(1)))

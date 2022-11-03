@@ -5,10 +5,10 @@ public
 enum Factory 
 {
     public static 
-    func transform(syntax source:SourceFileSyntax) throws -> Syntax 
+    func transform(syntax source:SourceFileSyntax) throws -> SourceFileSyntax 
     {
         let transformer:Transformer = .init()
-        let output:Syntax = transformer.visit(source)
+        let output:SourceFileSyntax = transformer.visit(source)
         if let error:any Error = transformer.errors.first 
         {
             throw error 

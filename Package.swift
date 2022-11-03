@@ -1,7 +1,7 @@
 // swift-tools-version:5.6
 import PackageDescription
 
-let toolchain:String = "swift-DEVELOPMENT-SNAPSHOT-2022-10-11-a"
+let toolchain:String = "swift-DEVELOPMENT-SNAPSHOT-2022-11-01-a"
 
 let package:Package = .init(
     name: "swift-package-factory",

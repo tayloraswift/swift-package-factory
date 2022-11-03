@@ -8,7 +8,7 @@ extension ExprSyntax
         if  let reparsed:SourceFileSyntax = 
             try? SyntaxParser.parse(source: "_ as \(self.description)"), 
                 reparsed.statements.count == 1, 
-            let reparsed:Syntax = reparsed.statements.first?.item, 
+            let reparsed:CodeBlockItemSyntax.Item = reparsed.statements.first?.item, 
             let reparsed:SequenceExprSyntax = reparsed.as(SequenceExprSyntax.self),
                 reparsed.elements.count == 3, 
             let reparsed:TypeExprSyntax = reparsed.elements.last?.as(TypeExprSyntax.self)
@@ -82,7 +82,7 @@ class Instantiator:SyntaxRewriter
         }
     }
     final override 
-    func visit(_ token:TokenSyntax) -> Syntax
+    func visit(_ token:TokenSyntax) -> TokenSyntax
     {
         let token:TokenSyntax = token
             .withLeadingTrivia(self.visit(trivia: token.leadingTrivia))
@@ -97,10 +97,10 @@ class Instantiator:SyntaxRewriter
                 let error:Factory.SubstitutionError = .notAnIdentifier(substitution.description, 
                     replacing: identifier)
                 self.errors.append(error)
-                return .init(token)
+                return token
             }
             // preserve the original trivia
-            return .init(token.withKind(substitution.identifier.tokenKind))
+            return token.withKind(substitution.identifier.tokenKind)
         }
         else 
         {
