@@ -72,7 +72,7 @@ class Instantiator:SyntaxRewriter
             let substitution:ExprSyntax = self.lookup(identifier)
         {
             // preserve the original trivia
-            return substitution 
+            return substitution
                 .withLeadingTrivia(expression.identifier.leadingTrivia)
                 .withTrailingTrivia(expression.identifier.trailingTrivia)
         }

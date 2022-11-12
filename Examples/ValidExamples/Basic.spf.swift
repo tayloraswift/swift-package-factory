@@ -3,7 +3,7 @@ import Swift
 /// Models a `FooType`. Has a member 
 /// named ``foo``.
 @frozen public 
-enum FooType 
+enum FooType
 {
     /// Returns the number `0`
     @inlinable public 
@@ -16,7 +16,7 @@ enum FooType
 /// Models a `BarType`. Has a member 
 /// named ``bar``.
 @frozen public 
-enum BarType 
+enum BarType
 {
     /// Returns the number `1`
     @inlinable public 
@@ -29,7 +29,7 @@ enum BarType
 /// Models a `BazType`. Has a member 
 /// named ``baz``.
 @frozen public 
-enum BazType 
+enum BazType
 {
     /// Returns the number `2`
     @inlinable public 
