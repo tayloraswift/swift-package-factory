@@ -29,7 +29,7 @@ let values:[Never] =
 /// named ``\(__member__)``.
 @matrix(__Type__: typenames, __member__: members, __value__: values)
 @frozen public 
-enum __Type__ 
+enum __Type__
 {
     /// Returns the number `\(__value__)`
     @inlinable public 
