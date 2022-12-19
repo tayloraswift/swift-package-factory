@@ -1,7 +1,7 @@
 version: "3.9"
 services:
     swift: 
-        image: swift-2022-11-11-a
+        image: swift-2022-12-17-a
         build:
             dockerfile: 'dockerfile'
         volumes:

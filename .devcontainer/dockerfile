@@ -36,7 +36,7 @@ ADD https://github.com/kylef/swiftenv/archive/1.5.0.tar.gz swiftenv.tar.gz
 RUN sudo chown ec2-user swiftenv.tar.gz
 
 # also overrides any `.swift-version` local configurations
-ENV SWIFT_VERSION DEVELOPMENT-SNAPSHOT-2022-11-11-a
+ENV SWIFT_VERSION DEVELOPMENT-SNAPSHOT-2022-12-17-a
 ENV SWIFTENV_ROOT /home/ec2-user/.swiftenv
 # install `swiftenv`
 RUN mkdir -p $SWIFTENV_ROOT
